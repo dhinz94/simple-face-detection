@@ -51,8 +51,8 @@ epochs = 10
 batchsize = 32
 test_split=0.25
 
-images = np.load(dataset_path + 'image_array.npy')
-boxes = np.load(dataset_path + 'box_array.npy')
+images = np.load(dataset_path + 'image_array.npy')[:10000]
+boxes = np.load(dataset_path + 'box_array.npy')[:10000]
 
 train_images=images[:int((1-test_split)*len(images))]
 test_images=images[int(test_split*len(images)):]
@@ -115,7 +115,7 @@ for e in range(epochs):
         validation_loss=loss_function(pred_test_boxes,batch_test_boxes)
 
         batch_losses.append(np.array(loss))
-        batch_validation_losses.append(validation_loss)
+        batch_validation_losses.append(np.array(validation_loss))
 
 
         if b % int(len(train_images) / batchsize / 5) == 0:
