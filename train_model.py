@@ -6,57 +6,13 @@ import tensorflow.keras.backend as K
 from utils import utils
 from matplotlib.patches import Rectangle
 
-# colab path
-dataset_path = '/content/drive/My Drive/celeba_copy/'
-
-# local path for development
-# dataset_path='/home/dominic/Dokumente/Github/simple-face-detection/data/'
-
-activation = tf.nn.relu
-normalization = BatchNormalization
-start_filter_size = 16
-epochs = 10
-batchsize = 16
-
-image_array = np.load(dataset_path + 'image_array.npy')
-box_array = np.load(dataset_path + 'box_array.npy')
-
-resolution = image_array.shape[1]
-print(image_array.shape)
-print(box_array.shape)
-
-input = Input(shape=(resolution, resolution, 3))
-
-x = Conv2D(start_filter_size, (3, 3), strides=(2, 2), activation=None)(input)
-x = normalization()(x)
-x = Activation(activation)(x)
-
-x = Conv2D(start_filter_size * 2, (3, 3), strides=(2, 2), activation=None)(x)
-x = normalization()(x)
-x = Activation(activation)(x)
-
-x = Conv2D(start_filter_size * 4, (3, 3), strides=(2, 2), activation=None)(x)
-x = normalization()(x)
-x = Activation(activation)(x)
-
-x = Conv2D(start_filter_size * 8, (3, 3), strides=(2, 2), activation=None)(x)
-x = normalization()(x)
-x = Activation(activation)(x)
-
-x = Flatten()(x)
-x = Dense(4)(x)
-output = Activation('sigmoid')(x)
-
-model = tf.keras.models.Model(inputs=input, outputs=output)
-print(model.summary())
-
-
 def loss_function(pred, true):
     loss = K.mean(K.abs(pred - true))
     return loss
 
 
 def compile():
+
     @tf.function
     def train_step(images, boxes):
         with tf.GradientTape() as tape:
@@ -69,13 +25,59 @@ def compile():
 
     return train_step
 
+def block(input,filter_amount):
+    x = Conv2D(filter_amount, (3, 3), strides=(2, 2), activation=None)(input)
+    x = normalization()(x)
+    x = Activation(activation)(x)
 
-optimizer = tf.keras.optimizers.Adam(lr=1e-4)
+    x = Conv2D(filter_amount, (3, 3), strides=(1, 1), activation=None)(x)
+    x = normalization()(x)
+    output = Activation(activation)(x)
 
-train_step = compile()
+    return output
+
+
+# colab path
+dataset_path = '/content/drive/My Drive/celeba_copy/'
+
+# local path for development
+dataset_path='/home/dominic/Dokumente/Github/simple-face-detection/data/'
+
+activation = tf.nn.relu
+normalization = BatchNormalization
+start_filter_amount = 64
+epochs = 10
+batchsize = 16
+
+image_array = np.load(dataset_path + 'image_array.npy')
+box_array = np.load(dataset_path + 'box_array.npy')
+
+resolution = image_array.shape[1]
+print(image_array.shape)
+print(box_array.shape)
+
+input = Input(shape=(resolution, resolution, 3))
+
+x=block(input,start_filter_amount)
+x=block(x,start_filter_amount*2)
+x=block(x,start_filter_amount*4)
+output=block(x,start_filter_amount*8)
+
+x = Flatten()(x)
+x = Dense(4)(x)
+output = Activation('sigmoid')(x)
+
+model = tf.keras.models.Model(inputs=input, outputs=output)
+print(model.summary())
+
+
 
 losses = []
 for e in range(epochs):
+
+    optimizer = tf.keras.optimizers.Adam(lr=1e-4)
+
+    train_step = compile()
 
     for b in range(int(len(image_array) / batchsize)):
         images = (image_array[b * batchsize:(b + 1) * batchsize] / 255).astype('float32')
@@ -103,4 +105,5 @@ for i in range(10):
     plt.gca().add_patch(Rectangle((label_coordinate_box[0], label_coordinate_box[1]), label_coordinate_box[2], label_coordinate_box[3], linewidth=1, edgecolor='g', facecolor='none'))
     plt.axis('off')
     plt.title('green=True, red=predicted')
+
 plt.show()
