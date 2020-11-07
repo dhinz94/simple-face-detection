@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
 import numpy as np
 import os
 import pandas as pd
@@ -28,6 +29,7 @@ for i in range(10):
 
     image=plt.imread(file_path)
     plt.imshow(image)
+    plt.gca().add_patch(Rectangle((50, 100), 40, 30, linewidth=1, edgecolor='r', facecolor='none'))
     plt.show()
 
 
