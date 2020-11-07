@@ -41,11 +41,12 @@ def block(input,filter_amount):
 dataset_path = '/content/drive/My Drive/celeba_copy/'
 
 # local path for development
-# dataset_path='/home/dominic/Dokumente/Github/simple-face-detection/data/'
+dataset_path='/home/dominic/Dokumente/Github/simple-face-detection/data/'
 
 activation = tf.nn.relu
 normalization = BatchNormalization
-start_filter_amount = 64
+use_bias=False
+start_filter_amount = 2
 epochs = 10
 batchsize = 32
 test_split=0.25
@@ -132,15 +133,15 @@ plt.ylabel('Loss')
 plt.title('Epoch Loss')
 plt.legend(['training','validation'])
 
-
+print('results from test dataset:')
 for i in range(20):
-    num = np.random.randint(0, len(train_images))
+    num = np.random.randint(0, len(test_images))
 
 
-    input_image = train_images[num].reshape(-1, train_images.shape[1], train_images.shape[2], train_images.shape[3]) / 255
+    input_image = test_images[num].reshape(-1, test_images.shape[1], test_images.shape[2], test_images.shape[3]) / 255
     predicted_relative_box = np.array(model(input_image)[0])
-    predicted_coordinate_box = utils.convert_relative_box_to_coordinate_box(predicted_relative_box, train_images.shape[1], train_images.shape[2])
-    label_coordinate_box = utils.convert_relative_box_to_coordinate_box(train_boxes[num], train_images.shape[1], train_images.shape[2])
+    predicted_coordinate_box = utils.convert_relative_box_to_coordinate_box(predicted_relative_box, test_images.shape[1], test_images.shape[2])
+    label_coordinate_box = utils.convert_relative_box_to_coordinate_box(test_boxes[num], test_images.shape[1], test_images.shape[2])
 
     plt.figure()
     plt.imshow(input_image[0])
