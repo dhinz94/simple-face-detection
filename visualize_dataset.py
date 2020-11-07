@@ -25,11 +25,15 @@ print(boxes)
 
 for i in range(10):
     num=np.random.randint(0,len(boxes))
-    file_path=image_path+file_list[num]
+    file_path=image_path+boxes.at[num,'image_id']
+    x=boxes.at[num,'x_1']
+    y=boxes.at[num,'y_1']
+    w = boxes.at[num, 'width']
+    h = boxes.at[num, 'height']
 
     image=plt.imread(file_path)
     plt.imshow(image)
-    plt.gca().add_patch(Rectangle((50, 100), 40, 30, linewidth=1, edgecolor='r', facecolor='none'))
+    plt.gca().add_patch(Rectangle((x, y), w, h, linewidth=1, edgecolor='r', facecolor='none'))
     plt.show()
 
 
