@@ -7,7 +7,7 @@ from utils import utils
 from matplotlib.patches import Rectangle
 
 def loss_function(pred, true):
-    loss = K.mean(K.abs(pred - true))
+    loss = K.mean(K.square(pred - true))
     return loss
 
 
@@ -88,7 +88,7 @@ for e in range(epochs):
         loss = train_step(images, boxes)
         batch_losses.append(np.array(loss))
 
-        if b % int(len(image_array) / batchsize / 2) == 0:
+        if b % int(len(image_array) / batchsize / 1) == 0:
             print('Epoch:', e, 'Batch:', b, 'Loss:', np.array(loss))
 
     epoch_losses.append(np.mean(batch_losses))
