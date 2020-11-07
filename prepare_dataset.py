@@ -9,7 +9,7 @@ from matplotlib.patches import Rectangle
 dataset_path='/content/drive/My Drive/celeba_copy/'
 
 # local path for development
-dataset_path='/home/dominic/Dokumente/Github/simple-face-detection/data/'
+# dataset_path='/home/dominic/Dokumente/Github/simple-face-detection/data/'
 
 image_path=dataset_path+'img_celeba/'
 box_path=dataset_path+'list_bbox_celeba.txt'
@@ -40,17 +40,17 @@ for id,row in boxes.iterrows():
     image=plt.imread(file_path)
 
 
-    plt.figure()
-    plt.imshow(image)
-    plt.gca().add_patch(Rectangle((box[0], box[1]), box[2], box[3], linewidth=1, edgecolor='r', facecolor='none'))
+    # plt.figure()
+    # plt.imshow(image)
+    # plt.gca().add_patch(Rectangle((box[0], box[1]), box[2], box[3], linewidth=1, edgecolor='r', facecolor='none'))
 
     #resize image and change bounding box coordinates
     image,box=utils.resize_image_and_bounding_box(image=image,box=box,new_height=target_resolution,new_width=target_resolution)
 
 
-    plt.figure()
-    plt.imshow(image)
-    plt.gca().add_patch(Rectangle((box[0], box[1]), box[2], box[3], linewidth=1, edgecolor='r', facecolor='none'))
+    # plt.figure()
+    # plt.imshow(image)
+    # plt.gca().add_patch(Rectangle((box[0], box[1]), box[2], box[3], linewidth=1, edgecolor='r', facecolor='none'))
 
     # convert coordinates of bounding boxes to values between 0 and 1
     relative_box=utils.convert_coordinate_box_to_relative_box(box=box,image_height=target_resolution,image_width=target_resolution)
