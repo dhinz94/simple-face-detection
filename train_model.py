@@ -7,7 +7,7 @@ from utils import utils
 from matplotlib.patches import Rectangle
 
 def loss_function(pred, true):
-    loss = K.mean(K.abs(pred - true))
+    loss = K.mean(K.square(pred - true))
     return loss
 
 
@@ -95,6 +95,9 @@ for e in range(epochs):
 
 plt.figure()
 plt.plot(epoch_losses)
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.title('Epoch Loss')
 
 for i in range(20):
     num = np.random.randint(0, len(image_array))
