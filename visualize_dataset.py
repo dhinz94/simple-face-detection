@@ -17,7 +17,9 @@ print(boxes)
 file_list=os.listdir(image_path)
 file_list=[x for x in file_list if '.jpg' in x]
 
-print(file_list)
+boxes=boxes[~boxes['image_id'].isin(file_list)]
+
+print(boxes)
 
 
 
