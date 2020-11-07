@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import  tensorflow as tf
 from tensorflow.keras.layers import Input,Conv2D,Flatten,Dense,BatchNormalization, Add, Activation,Dense
 import tensorflow.keras.backend as K
+from utils import utils
+from matplotlib.patches import  Rectangle
 
 
 # colab path
@@ -76,6 +78,7 @@ optimizer=tf.keras.optimizers.Adam(lr=1e-3)
 
 train_step=compile()
 
+losses=[]
 for e in range(epochs):
 
 
@@ -84,13 +87,33 @@ for e in range(epochs):
         boxes=(box_array[b*batchsize:(b+1)*batchsize]).astype('float32')
 
         loss=train_step(images,boxes)
-        if b%int(len(image_array)/batchsize/4)==0:
+        losses.append(np.array(loss))
+        if b%int(len(image_array)/batchsize/2)==0:
 
             print('Epoch:',e,'Batch:',b,'Loss:',np.array(loss))
 
-box=model(image_array[10].reshape(-1,image_array.shape[1],image_array.shape[2],image_array.shape[3])/255)
-print(box)
-print(box_array[0])
+plt.figure()
+plt.plot(losses)
+
+
+
+for i in range(10):
+    num=np.random.randint(0,len(image_array))
+
+    input_image=image_array[num].reshape(-1,image_array.shape[1],image_array.shape[2],image_array.shape[3])/255
+    predicted_relative_box=np.array(model(input_image)[0])
+    predicted_coordinate_box=utils.convert_relative_box_to_coordinate_box(predicted_relative_box,image_array.shape[1],image_array.shape[2])
+    label_coordinate_box=utils.convert_relative_box_to_coordinate_box(box_array[num],image_array.shape[1],image_array.shape[2])
+
+
+
+    plt.figure()
+    plt.imshow(input_image[0])
+    plt.gca().add_patch(Rectangle((predicted_coordinate_box[0], predicted_coordinate_box[1]), predicted_coordinate_box[2], predicted_coordinate_box[3], linewidth=1, edgecolor='r', facecolor='none'))
+    plt.gca().add_patch(Rectangle((label_coordinate_box[0], label_coordinate_box[1]), label_coordinate_box[2], label_coordinate_box[3], linewidth=1, edgecolor='r', facecolor='none'))
+
+
+plt.show()
 
 
 
