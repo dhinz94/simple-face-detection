@@ -60,8 +60,6 @@ for id,row in boxes.iterrows():
 
     plt.show()
 
-    if id>5:
-        break
 
 #convert to numpy array with shape (N,H,W,C)
 image_array=np.array(image_array)
