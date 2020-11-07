@@ -31,13 +31,21 @@ image_array=[]
 box_array=[]
 
 for id,row in boxes.iterrows():
+
+    if id%10000==0:
+        print('processed images:',id)
+
     file_path=image_path+row['image_id']
     x=row['x_1']
     y=row['y_1']
     w = row['width']
     h = row['height']
     box=np.array([x,y,w,h])
-    image=plt.imread(file_path)
+    try:
+        image=plt.imread(file_path)
+    except Exception as e:
+        print('cannot read image: skips image')
+        continue
 
 
     # plt.figure()
