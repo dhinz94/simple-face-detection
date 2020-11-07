@@ -7,7 +7,7 @@ from utils import utils
 from matplotlib.patches import Rectangle
 
 def loss_function(pred, true):
-    loss = K.mean(K.square(pred - true))
+    loss = K.mean(K.abs(pred - true))
     return loss
 
 
@@ -46,7 +46,7 @@ dataset_path = '/content/drive/My Drive/celeba_copy/'
 activation = tf.nn.relu
 normalization = BatchNormalization
 start_filter_amount = 64
-epochs = 10
+epochs = 100
 batchsize = 16
 
 image_array = np.load(dataset_path + 'image_array.npy')
