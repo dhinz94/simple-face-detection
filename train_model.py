@@ -118,7 +118,7 @@ for e in range(epochs):
         batch_validation_losses.append(validation_loss)
 
 
-        if b % int(len(train_images) / batchsize / 1) == 0:
+        if b % int(len(train_images) / batchsize / 5) == 0:
             print('Epoch:', e, 'Batch:', b, 'Loss:', np.array(loss),'Val. Loss:',np.array(validation_loss))
 
     epoch_losses.append(np.mean(batch_losses))
