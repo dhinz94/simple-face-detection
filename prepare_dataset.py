@@ -66,14 +66,19 @@ for id,row in boxes.iterrows():
     image_array.append(image)
     box_array.append(relative_box)
 
-    plt.show()
+    # plt.show()
+
+    if id>100:
+        break
 
 
 #convert to numpy array with shape (N,H,W,C)
 image_array=np.array(image_array)
+print(image_array.dtype)
 
 #convert to numpy array with shape(N,4)
 box_array=np.array(box_array)
+
 
 np.save(dataset_path+'image_array.npy',image_array)
 np.save(dataset_path+'box_array.npy',box_array)
