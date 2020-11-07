@@ -11,7 +11,7 @@ box_path=dataset_path+'list_bbox_celeba.txt'
 print('image_path exists: ',os.path.exists(image_path))
 print('box_path exists: ',os.path.exists(box_path))
 
-boxes=pd.read_csv(box_path,sep=' ')
+boxes=pd.read_csv(box_path,delim_whitespace=True)
 print(boxes)
 
 
