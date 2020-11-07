@@ -123,7 +123,7 @@ for e in range(epochs):
 
     epoch_losses.append(np.mean(batch_losses))
     epoch_validation_losses.append(np.mean(batch_validation_losses))
-    # model.save(dataset_path+'model.h5')
+    model.save(dataset_path+'model.h5')
 
 plt.figure()
 plt.plot(epoch_losses)
