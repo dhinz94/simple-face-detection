@@ -47,7 +47,7 @@ activation = tf.nn.relu
 normalization = BatchNormalization
 start_filter_amount = 64
 epochs = 100
-batchsize = 16
+batchsize = 32
 
 image_array = np.load(dataset_path + 'image_array.npy')
 box_array = np.load(dataset_path + 'box_array.npy')
@@ -76,6 +76,11 @@ epoch_losses = []
 
 for e in range(epochs):
 
+    p=np.random.permutation(len(image_array))
+
+    image_array=image_array[p]
+    box_array=box_array[p]
+
     optimizer = tf.keras.optimizers.Adam(lr=1e-4)
 
     train_step = compile()
@@ -101,6 +106,7 @@ plt.title('Epoch Loss')
 
 for i in range(20):
     num = np.random.randint(0, len(image_array))
+
 
     input_image = image_array[num].reshape(-1, image_array.shape[1], image_array.shape[2], image_array.shape[3]) / 255
     predicted_relative_box = np.array(model(input_image)[0])
