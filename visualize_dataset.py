@@ -8,7 +8,7 @@ import pandas as pd
 dataset_path='/content/drive/My Drive/celeba_copy/'
 
 # local path for development
-dataset_path='/home/dominic/Dokumente/Github/simple-face-detection/data/'
+# dataset_path='/home/dominic/Dokumente/Github/simple-face-detection/data/'
 
 image_path=dataset_path+'img_celeba/'
 box_path=dataset_path+'list_bbox_celeba.txt'

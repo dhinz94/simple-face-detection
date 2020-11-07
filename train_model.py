@@ -48,13 +48,24 @@ normalization = BatchNormalization
 start_filter_amount = 64
 epochs = 100
 batchsize = 32
+test_split=0.25
 
-image_array = np.load(dataset_path + 'image_array.npy')
-box_array = np.load(dataset_path + 'box_array.npy')
+images = np.load(dataset_path + 'image_array.npy')
+boxes = np.load(dataset_path + 'box_array.npy')
 
-resolution = image_array.shape[1]
-print(image_array.shape)
-print(box_array.shape)
+train_images=images[:int((1-test_split)*len(images))]
+test_images=images[int(test_split*len(images)):]
+
+train_boxes=boxes[:int((1-test_split)*len(images))]
+test_boxes=boxes[int(test_split*len(images)):]
+
+images=None
+boxes=None
+
+
+resolution = train_images.shape[1]
+print(train_images.shape)
+print(train_boxes.shape)
 
 input = Input(shape=(resolution, resolution, 3))
 
@@ -73,45 +84,63 @@ print(model.summary())
 
 
 epoch_losses = []
+epoch_validation_losses=[]
 
 for e in range(epochs):
 
-    p=np.random.permutation(len(image_array))
+    p=np.random.permutation(len(train_images))
 
-    image_array=image_array[p]
-    box_array=box_array[p]
+    train_images=train_images[p]
+    train_boxes=train_boxes[p]
 
     optimizer = tf.keras.optimizers.Adam(lr=1e-4)
 
     train_step = compile()
 
     batch_losses = []
-    for b in range(int(len(image_array) / batchsize)):
-        images = (image_array[b * batchsize:(b + 1) * batchsize] / 255).astype('float32')
-        boxes = (box_array[b * batchsize:(b + 1) * batchsize]).astype('float32')
+    batch_validation_losses=[]
 
-        loss = train_step(images, boxes)
+    for b in range(int(len(train_images) / batchsize)):
+        batch_images = (train_images[b * batchsize:(b + 1) * batchsize] / 255).astype('float32')
+        batch_boxes = (train_boxes[b * batchsize:(b + 1) * batchsize]).astype('float32')
+
+        batch_test_images= (test_images[b * batchsize:(b + 1) * batchsize] / 255).astype('float32')
+        batch_test_boxes = (test_boxes[b * batchsize:(b + 1) * batchsize]).astype('float32')
+
+
+        loss = train_step(batch_images, batch_boxes)
+
+        pred_test_boxes=model(batch_test_images)
+        validation_loss=loss_function(pred_test_boxes,batch_test_boxes)
+
         batch_losses.append(np.array(loss))
+        batch_validation_losses.append(validation_loss)
 
-        if b % int(len(image_array) / batchsize / 1) == 0:
-            print('Epoch:', e, 'Batch:', b, 'Loss:', np.array(loss))
+
+        if b % int(len(train_images) / batchsize / 1) == 0:
+            print('Epoch:', e, 'Batch:', b, 'Loss:', np.array(loss),'Val. Loss:',np.array(validation_loss))
 
     epoch_losses.append(np.mean(batch_losses))
+    epoch_validation_losses.append(np.mean(batch_validation_losses))
+    model.save(dataset_path+'model.h5')
 
 plt.figure()
 plt.plot(epoch_losses)
+plt.plot(epoch_validation_losses)
 plt.xlabel('Epoch')
 plt.ylabel('Loss')
 plt.title('Epoch Loss')
+plt.legend(['training','validation'])
+
 
 for i in range(20):
-    num = np.random.randint(0, len(image_array))
+    num = np.random.randint(0, len(train_images))
 
 
-    input_image = image_array[num].reshape(-1, image_array.shape[1], image_array.shape[2], image_array.shape[3]) / 255
+    input_image = train_images[num].reshape(-1, train_images.shape[1], train_images.shape[2], train_images.shape[3]) / 255
     predicted_relative_box = np.array(model(input_image)[0])
-    predicted_coordinate_box = utils.convert_relative_box_to_coordinate_box(predicted_relative_box, image_array.shape[1], image_array.shape[2])
-    label_coordinate_box = utils.convert_relative_box_to_coordinate_box(box_array[num], image_array.shape[1], image_array.shape[2])
+    predicted_coordinate_box = utils.convert_relative_box_to_coordinate_box(predicted_relative_box, train_images.shape[1], train_images.shape[2])
+    label_coordinate_box = utils.convert_relative_box_to_coordinate_box(train_boxes[num], train_images.shape[1], train_images.shape[2])
 
     plt.figure()
     plt.imshow(input_image[0])

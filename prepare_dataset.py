@@ -68,7 +68,7 @@ for id,row in boxes.iterrows():
 
     # plt.show()
 
-    if id>100:
+    if id>10000:
         break
 
 
