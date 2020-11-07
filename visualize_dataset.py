@@ -14,5 +14,10 @@ print('box_path exists: ',os.path.exists(box_path))
 boxes=pd.read_csv(box_path,delim_whitespace=True,skiprows=1)
 print(boxes)
 
+file_list=os.listdir(image_path)
+file_list=[x for x in file_list if '.jpg' in file_list]
+
+print(file_list)
+
 
 
