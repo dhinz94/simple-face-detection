@@ -68,7 +68,7 @@ for id,row in boxes.iterrows():
 
     # plt.show()
 
-    if id>10000:
+    if len(image_array)>20000:
         break
 
 
