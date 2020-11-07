@@ -72,26 +72,31 @@ print(model.summary())
 
 
 
-losses = []
+epoch_losses = []
+
 for e in range(epochs):
 
     optimizer = tf.keras.optimizers.Adam(lr=1e-4)
 
     train_step = compile()
 
+    batch_losses = []
     for b in range(int(len(image_array) / batchsize)):
         images = (image_array[b * batchsize:(b + 1) * batchsize] / 255).astype('float32')
         boxes = (box_array[b * batchsize:(b + 1) * batchsize]).astype('float32')
 
         loss = train_step(images, boxes)
-        losses.append(np.array(loss))
+        batch_losses.append(np.array(loss))
+
         if b % int(len(image_array) / batchsize / 2) == 0:
             print('Epoch:', e, 'Batch:', b, 'Loss:', np.array(loss))
 
-plt.figure()
-plt.plot(losses)
+    epoch_losses.append(np.mean(batch_losses))
 
-for i in range(10):
+plt.figure()
+plt.plot(epoch_losses)
+
+for i in range(20):
     num = np.random.randint(0, len(image_array))
 
     input_image = image_array[num].reshape(-1, image_array.shape[1], image_array.shape[2], image_array.shape[3]) / 255
