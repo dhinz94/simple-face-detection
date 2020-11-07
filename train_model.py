@@ -41,7 +41,7 @@ def block(input,filter_amount):
 dataset_path = '/content/drive/My Drive/celeba_copy/'
 
 # local path for development
-dataset_path='/home/dominic/Dokumente/Github/simple-face-detection/data/'
+# dataset_path='/home/dominic/Dokumente/Github/simple-face-detection/data/'
 
 activation = tf.nn.relu
 normalization = BatchNormalization
