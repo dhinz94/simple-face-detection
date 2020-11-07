@@ -46,7 +46,7 @@ dataset_path = '/content/drive/My Drive/celeba_copy/'
 activation = tf.nn.relu
 normalization = BatchNormalization
 start_filter_amount = 64
-epochs = 100
+epochs = 10
 batchsize = 32
 test_split=0.25
 
@@ -122,7 +122,7 @@ for e in range(epochs):
 
     epoch_losses.append(np.mean(batch_losses))
     epoch_validation_losses.append(np.mean(batch_validation_losses))
-    model.save(dataset_path+'model.h5')
+    # model.save(dataset_path+'model.h5')
 
 plt.figure()
 plt.plot(epoch_losses)

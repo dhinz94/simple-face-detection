@@ -32,7 +32,7 @@ box_array=[]
 
 for id,row in boxes.iterrows():
 
-    if id%10000==0:
+    if id%500==0:
         print('processed images:',id)
 
     file_path=image_path+row['image_id']
