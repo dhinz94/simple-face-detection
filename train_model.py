@@ -118,6 +118,8 @@ output_labels =Activation('sigmoid')(output_labels)
 model = tf.keras.models.Model(inputs=input, outputs=[output_box,output_labels])
 print(model.summary())
 
+model=tf.keras.models.load_model(dataset_path+'model.h5')
+
 
 
 for i in range(10):
@@ -139,7 +141,7 @@ epoch_losses = []
 epoch_validation_losses=[]
 epoch_validation_accuracies=[]
 
-optimizer = tf.keras.optimizers.Adam(lr=1e-5)
+optimizer = tf.keras.optimizers.Adam(lr=1e-4)
 
 train_step = compile()
 
