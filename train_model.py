@@ -55,7 +55,7 @@ dataset_path = '/content/drive/My Drive/simple_face_detection_data/'
 activation = tf.nn.relu
 normalization = BatchNormalization
 use_bias=False
-start_filter_amount = 64
+start_filter_amount = 16
 epochs = 10
 batchsize = 16
 test_split=0.25
@@ -101,9 +101,12 @@ input = Input(shape=(resolution, resolution, 3))
 x=block(input,start_filter_amount)
 x=block(x,start_filter_amount*2)
 x=block(x,start_filter_amount*4)
-output=block(x,start_filter_amount*8)
+x=block(x,start_filter_amount*8)
+x=block(x,start_filter_amount*16)
+output=block(x,start_filter_amount*32)
 
 x = Flatten()(x)
+x= Dense(100)(x)
 output_box = Dense(4)(x)
 output_box = Activation('sigmoid')(output_box)
 
@@ -141,7 +144,7 @@ for e in range(epochs):
     train_images=train_images[p]
     train_boxes=train_boxes[p]
 
-    optimizer = tf.keras.optimizers.Adam(lr=1e-6)
+    optimizer = tf.keras.optimizers.Adam(lr=1e-5)
 
     train_step = compile()
 
