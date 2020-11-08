@@ -48,8 +48,8 @@ dataset_path = '/content/drive/My Drive/simple_face_detection_data/'
 activation = tf.nn.relu
 normalization = BatchNormalization
 use_bias=False
-start_filter_amount = 2
-epochs = 1
+start_filter_amount = 64
+epochs = 10
 batchsize = 32
 test_split=0.25
 
@@ -172,7 +172,8 @@ for i in range(20):
 
     plt.figure()
     plt.imshow(input_image[0])
-    plt.gca().add_patch(Rectangle((predicted_coordinate_box[0], predicted_coordinate_box[1]), predicted_coordinate_box[2], predicted_coordinate_box[3], linewidth=1, edgecolor='r', facecolor='none'))
+    if np.array(pred_label)[0,0]>0.5:
+        plt.gca().add_patch(Rectangle((predicted_coordinate_box[0], predicted_coordinate_box[1]), predicted_coordinate_box[2], predicted_coordinate_box[3], linewidth=1, edgecolor='r', facecolor='none'))
     plt.gca().add_patch(Rectangle((label_coordinate_box[0], label_coordinate_box[1]), label_coordinate_box[2], label_coordinate_box[3], linewidth=1, edgecolor='g', facecolor='none'))
     plt.axis('off')
     plt.title('green=True, red=predicted, conf:'+str(np.array(pred_label[0][0]).round(2)))
