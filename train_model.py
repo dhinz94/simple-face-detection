@@ -118,7 +118,7 @@ output_labels =Activation('sigmoid')(output_labels)
 model = tf.keras.models.Model(inputs=input, outputs=[output_box,output_labels])
 print(model.summary())
 
-model=tf.keras.models.load_model(dataset_path+'model.h5')
+model=tf.keras.models.load_model(dataset_path+'model_localization.h5')
 
 
 
@@ -151,6 +151,7 @@ for e in range(epochs):
 
     train_images=train_images[p]
     train_boxes=train_boxes[p]
+    train_labels=train_labels[p]
 
     batch_losses = []
     batch_validation_losses=[]
