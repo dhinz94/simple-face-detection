@@ -78,7 +78,7 @@ print(image_array.dtype)
 box_array=np.array(box_array)
 
 
-np.save(dataset_path+'image_array.npy',image_array)
+np.save(dataset_path+'faces.npy',image_array)
 np.save(dataset_path+'box_array.npy',box_array)
 
 

@@ -12,7 +12,7 @@ dataset_path='/home/dominic/Dokumente/Github/simple-face-detection/data/'
 
 model=tf.keras.models.load_model(dataset_path+'model.h5',custom_objects={'relu':tf.nn.relu},compile=False)
 
-images = np.load(dataset_path + 'image_array.npy')
+images = np.load(dataset_path + 'faces.npy')
 
 cam = cv2.VideoCapture(0)
 
