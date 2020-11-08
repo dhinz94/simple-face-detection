@@ -43,7 +43,7 @@ def block(input,filter_amount):
 dataset_path = '/content/drive/My Drive/simple_face_detection_data/'
 
 # local path for development
-# dataset_path='/home/dominic/Dokumente/Github/simple-face-detection/data/'
+dataset_path='/home/dominic/Dokumente/Github/simple-face-detection/data/'
 
 activation = tf.nn.relu
 normalization = BatchNormalization
@@ -60,16 +60,18 @@ labels=np.load(dataset_path + 'train_labels.npy')[:10000]
 print('images:',len(images))
 print('faces:',labels.sum())
 
+
+
 train_images=images[:int((1-test_split)*len(images))]
-test_images=images[int(test_split*len(images)):]
+test_images=images[int((1-test_split)*len(images)):]
 
 
 train_boxes=boxes[:int((1-test_split)*len(images))]
-test_boxes=boxes[int(test_split*len(images)):]
+test_boxes=boxes[int((1-test_split)*len(images)):]
 
 
 train_labels=labels[:int((1-test_split)*len(images))]
-test_labels=labels[int(test_split*len(images)):]
+test_labels=labels[int((1-test_split)*len(images)):]
 
 images=None
 boxes=None
@@ -168,12 +170,11 @@ for i in range(20):
     predicted_coordinate_box = utils.convert_relative_box_to_coordinate_box(predicted_relative_box, test_images.shape[1], test_images.shape[2])
     label_coordinate_box = utils.convert_relative_box_to_coordinate_box(test_boxes[num], test_images.shape[1], test_images.shape[2])
 
-    print('confidence: ',pred_label[0])
     plt.figure()
     plt.imshow(input_image[0])
     plt.gca().add_patch(Rectangle((predicted_coordinate_box[0], predicted_coordinate_box[1]), predicted_coordinate_box[2], predicted_coordinate_box[3], linewidth=1, edgecolor='r', facecolor='none'))
     plt.gca().add_patch(Rectangle((label_coordinate_box[0], label_coordinate_box[1]), label_coordinate_box[2], label_coordinate_box[3], linewidth=1, edgecolor='g', facecolor='none'))
     plt.axis('off')
-    plt.title('green=True, red=predicted')
+    plt.title('green=True, red=predicted, conf:'+str(np.array(pred_label[0][0]).round(2)))
 
 plt.show()
