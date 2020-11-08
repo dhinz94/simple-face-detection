@@ -32,7 +32,7 @@ for file in file_paths:
 
     image=plt.imread(file)
     image=cv2.resize(image,(256,256))
-    image.reshape(1,256,256,-1)
+    image=image.reshape(1,256,256,-1)
     if image.shape[3]==1:
         image=cv2.cvtColor(image,cv2.COLOR_GRAY2RGB)
     images.append(image)
