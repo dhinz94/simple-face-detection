@@ -19,6 +19,9 @@ print('faces:',len(faces))
 print('backgrounds:',len(backgrounds))
 
 merged=np.concatenate([faces,backgrounds],axis=0)
+faces=None
+backgrounds=None
+
 labels=np.concatenate([face_labels,background_labels],axis=0)
 boxes=np.concatenate([boxes,empty_boxes],axis=0)
 

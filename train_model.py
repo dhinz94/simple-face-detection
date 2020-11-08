@@ -57,6 +57,9 @@ images = np.load(dataset_path + 'train_images.npy')[:10000]
 boxes = np.load(dataset_path + 'train_boxes.npy')[:10000]
 labels=np.load(dataset_path + 'train_labels.npy')[:10000]
 
+print('images:',len(images))
+print('faces:',labels.sum())
+
 train_images=images[:int((1-test_split)*len(images))]
 test_images=images[int(test_split*len(images)):]
 
@@ -71,6 +74,8 @@ test_labels=labels[int(test_split*len(images)):]
 images=None
 boxes=None
 labels=None
+
+
 
 
 resolution = train_images.shape[1]
