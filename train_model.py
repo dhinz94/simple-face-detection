@@ -128,6 +128,8 @@ for i in range(10):
     plt.axis('off')
     plt.title('green=True'+str(test_labels[num][0]))
 
+plt.show()
+
 epoch_losses = []
 epoch_validation_losses=[]
 epoch_validation_accuracies=[]
