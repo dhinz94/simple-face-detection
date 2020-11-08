@@ -103,7 +103,8 @@ x=block(x,start_filter_amount*2)
 x=block(x,start_filter_amount*4)
 x=block(x,start_filter_amount*8)
 x=block(x,start_filter_amount*16)
-output=block(x,start_filter_amount*32)
+x=block(x,start_filter_amount*32)
+output=block(x,start_filter_amount*64)
 
 x = Flatten()(x)
 x= Dense(100)(x)
@@ -137,16 +138,16 @@ epoch_losses = []
 epoch_validation_losses=[]
 epoch_validation_accuracies=[]
 
+optimizer = tf.keras.optimizers.Adam(lr=1e-5)
+
+train_step = compile()
+
 for e in range(epochs):
 
     p=np.random.permutation(len(train_images))
 
     train_images=train_images[p]
     train_boxes=train_boxes[p]
-
-    optimizer = tf.keras.optimizers.Adam(lr=1e-5)
-
-    train_step = compile()
 
     batch_losses = []
     batch_validation_losses=[]
