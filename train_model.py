@@ -118,8 +118,8 @@ x = Dropout(0.3)(x)
 x=block(x,start_filter_amount*32)
 x = Dropout(0.3)(x)
 
-x=block(x,start_filter_amount*64)
-x = Dropout(0.3)(x)
+# x=block(x,start_filter_amount*64)
+# x = Dropout(0.3)(x)
 
 x = Flatten()(x)
 x= Dense(100)(x)
