@@ -38,6 +38,10 @@ for file in file_paths:
     image=image.reshape(1,256,256,-1)
     if image.shape[3]==1:
         image=cv2.cvtColor(image,cv2.COLOR_GRAY2RGB)
+
+    if not image.shape == (1,256,256,3):
+        continue
+
     images.append(image)
 
 images=np.array(images)
