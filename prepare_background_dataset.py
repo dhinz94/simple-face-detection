@@ -27,11 +27,14 @@ for file in file_paths:
     if i>10000:
         break
 
-    if i%100:
+    if i%100==0:
         print('processed images:',i)
 
     image=plt.imread(file)
     image=cv2.resize(image,(256,256))
+    image.reshape(1,256,256,-1)
+    if image.shape[3]==1:
+        image=cv2.cvtColor(image,cv2.COLOR_GRAY2RGB)
     images.append(image)
 
 images=np.array(images)
