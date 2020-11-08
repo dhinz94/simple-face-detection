@@ -141,7 +141,7 @@ for e in range(epochs):
     train_images=train_images[p]
     train_boxes=train_boxes[p]
 
-    optimizer = tf.keras.optimizers.Adam(lr=1e-3)
+    optimizer = tf.keras.optimizers.Adam(lr=1e-6)
 
     train_step = compile()
 
