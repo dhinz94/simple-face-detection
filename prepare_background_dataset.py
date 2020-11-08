@@ -19,6 +19,8 @@ for root,subdir,files in os.walk(background_image_path):
     for file in files:
         file_paths.append(os.path.join(root,file))
 
+file_paths=file_paths[np.random.permutation(len(file_paths))]
+
 images=[]
 i=0
 for file in file_paths:
