@@ -31,7 +31,8 @@ def compile():
 
         gradients = tape.gradient(loss, model.trainable_variables)
         optimizer.apply_gradients(zip(gradients, model.trainable_variables))
-        return loss
+        train_acc=K.sum(pred_labels)/K.sum(labels)
+        return loss,train_acc
 
     return train_step
 
@@ -118,7 +119,7 @@ output_labels =Activation('sigmoid')(output_labels)
 model = tf.keras.models.Model(inputs=input, outputs=[output_box,output_labels])
 print(model.summary())
 
-model=tf.keras.models.load_model(dataset_path+'model_localization.h5')
+# model=tf.keras.models.load_model(dataset_path+'model_localization.h5')
 
 
 
@@ -139,6 +140,7 @@ plt.show()
 
 epoch_losses = []
 epoch_validation_losses=[]
+epoch_accuracies=[]
 epoch_validation_accuracies=[]
 
 optimizer = tf.keras.optimizers.Adam(lr=1e-5)
@@ -155,6 +157,7 @@ for e in range(epochs):
 
     batch_losses = []
     batch_validation_losses=[]
+    batch_accuracies=[]
     batch_validation_accuracies=[]
 
     for b in range(int(len(train_images) / batchsize)):
@@ -168,15 +171,18 @@ for e in range(epochs):
         batch_test_boxes = (test_boxes[test_b * batchsize:(test_b + 1) * batchsize]).astype('float32')
         batch_test_labels = (test_labels[test_b * batchsize:(test_b + 1) * batchsize]).astype('float32')
 
-        loss = train_step(batch_images, batch_boxes,batch_labels)
+        loss,train_acc = train_step(batch_images, batch_boxes,batch_labels)
 
         pred_test_boxes,pred_test_labels=model(batch_test_images)
         validation_loss=loss_function(pred_test_boxes,pred_test_labels,batch_test_boxes,batch_test_labels)
 
-        batch_validation_accuracy=np.sum(np.array(pred_test_labels))/np.sum(test_labels)
+
+
+        batch_validation_accuracy=np.sum(np.array(pred_test_labels))/np.sum(batch_test_labels)
 
         batch_losses.append(np.array(loss))
         batch_validation_losses.append(np.array(validation_loss))
+        batch_accuracies.append(np.array(train_acc))
         batch_validation_accuracies.append(batch_validation_accuracy)
 
 
@@ -184,9 +190,10 @@ for e in range(epochs):
 
 
         if b % int(len(train_images) / batchsize / 5) == 0:
-            print('Epoch:', e, 'Batch:', b, 'Loss:', np.array(np.mean(batch_losses)),'Val. Loss:',np.array(np.mean(batch_validation_losses)),'Val. Acc.',np.mean(batch_validation_accuracies))
+            print('Epoch:', e, 'Batch:', b, 'Loss:', np.array(np.mean(batch_losses)),'Val. Loss:',np.array(np.mean(batch_validation_losses)),'Acc.',np.mean(batch_accuracies),'Val. Acc.',np.mean(batch_validation_accuracies))
 
     epoch_losses.append(np.mean(batch_losses))
+    epoch_accuracies.append(np.mean(batch_accuracies))
     epoch_validation_losses.append(np.mean(batch_validation_losses))
     epoch_validation_accuracies.append(np.mean(batch_validation_accuracies))
     model.save(dataset_path+'model.h5')
@@ -200,11 +207,12 @@ plt.title('Epoch Loss')
 plt.legend(['training','validation'])
 
 plt.figure()
+plt.plot(epoch_accuracies)
 plt.plot(epoch_validation_accuracies)
 plt.xlabel('Epoch')
 plt.ylabel('Acc.')
 plt.title('Epoch Acc.')
-plt.legend(['validation acc.'])
+plt.legend(['training','validation'])
 
 print('results from test dataset:')
 for i in range(20):
