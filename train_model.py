@@ -7,9 +7,12 @@ from utils import utils
 from matplotlib.patches import Rectangle
 
 def loss_function(pred_boxes, pred_labels,true_boxes,true_labels):
-    box_loss = K.mean(true_labels*K.mean(K.square(pred_boxes - true_boxes),axis=1))
+
+
+    box_loss = K.mean(true_labels*K.sum(K.square(pred_boxes - true_boxes),axis=1))
     classification_loss=K.mean(K.square(pred_labels-true_labels))
     loss=box_loss+classification_loss
+
     return loss
 
 
@@ -48,9 +51,9 @@ dataset_path = '/content/drive/My Drive/simple_face_detection_data/'
 activation = tf.nn.relu
 normalization = BatchNormalization
 use_bias=False
-start_filter_amount = 64
+start_filter_amount = 8
 epochs = 10
-batchsize = 32
+batchsize = 16
 test_split=0.25
 
 images = np.load(dataset_path + 'train_images.npy')[:10000]
@@ -130,9 +133,11 @@ for e in range(epochs):
         batch_boxes = (train_boxes[b * batchsize:(b + 1) * batchsize]).astype('float32')
         batch_labels= (train_labels[b * batchsize:(b + 1) * batchsize]).astype('float32')
 
-        batch_test_images= (test_images[b * batchsize:(b + 1) * batchsize] / 255).astype('float32')
-        batch_test_boxes = (test_boxes[b * batchsize:(b + 1) * batchsize]).astype('float32')
-        batch_test_labels = (test_labels[b * batchsize:(b + 1) * batchsize]).astype('float32')
+        test_b=np.random.randint(0,int(len(test_images) / batchsize))
+
+        batch_test_images= (test_images[test_b * batchsize:(test_b + 1) * batchsize] / 255).astype('float32')
+        batch_test_boxes = (test_boxes[test_b * batchsize:(test_b + 1) * batchsize]).astype('float32')
+        batch_test_labels = (test_labels[test_b * batchsize:(test_b + 1) * batchsize]).astype('float32')
 
         loss = train_step(batch_images, batch_boxes,batch_labels)
 
@@ -141,6 +146,8 @@ for e in range(epochs):
 
         batch_losses.append(np.array(loss))
         batch_validation_losses.append(np.array(validation_loss))
+
+
 
 
         if b % int(len(train_images) / batchsize / 5) == 0:
