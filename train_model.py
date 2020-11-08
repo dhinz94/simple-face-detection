@@ -115,6 +115,19 @@ print(model.summary())
 
 
 
+for i in range(10):
+    num = np.random.randint(0, len(test_images))
+
+    input_image = test_images[num].reshape(-1, test_images.shape[1], test_images.shape[2], test_images.shape[3]) / 255
+
+    label_coordinate_box = utils.convert_relative_box_to_coordinate_box(test_boxes[num], test_images.shape[1], test_images.shape[2])
+
+    plt.figure()
+    plt.imshow(input_image[0])
+    plt.gca().add_patch(Rectangle((label_coordinate_box[0], label_coordinate_box[1]), label_coordinate_box[2], label_coordinate_box[3], linewidth=1, edgecolor='g', facecolor='none'))
+    plt.axis('off')
+    plt.title('green=True'+str(test_labels[num][0]))
+
 epoch_losses = []
 epoch_validation_losses=[]
 epoch_validation_accuracies=[]
