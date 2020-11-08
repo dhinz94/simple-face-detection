@@ -126,7 +126,7 @@ for i in range(10):
     plt.imshow(input_image[0])
     plt.gca().add_patch(Rectangle((label_coordinate_box[0], label_coordinate_box[1]), label_coordinate_box[2], label_coordinate_box[3], linewidth=1, edgecolor='g', facecolor='none'))
     plt.axis('off')
-    plt.title('green=True'+str(test_labels[num][0]))
+    plt.title('green=True '+str(test_labels[num][0]))
 
 plt.show()
 
@@ -141,7 +141,7 @@ for e in range(epochs):
     train_images=train_images[p]
     train_boxes=train_boxes[p]
 
-    optimizer = tf.keras.optimizers.Adam(lr=1e-5)
+    optimizer = tf.keras.optimizers.Adam(lr=1e-3)
 
     train_step = compile()
 
