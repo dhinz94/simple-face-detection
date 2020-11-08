@@ -27,8 +27,7 @@ i=0
 for file in file_paths:
     i+=1
 
-    if i>10000:
-        break
+
 
     if i%100==0:
         print('processed images:',i)
@@ -40,9 +39,13 @@ for file in file_paths:
         image=cv2.cvtColor(image,cv2.COLOR_GRAY2RGB)
 
     if not image.shape == (1,256,256,3):
+        print('shape error: skips image')
         continue
 
     images.append(image)
+
+    if len(images)>=10000:
+        break
 
 images=np.array(images)
 
