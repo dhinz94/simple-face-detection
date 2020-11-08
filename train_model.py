@@ -60,7 +60,7 @@ use_bias=False
 start_filter_amount = 16
 epochs = 100
 batchsize = 32
-test_split=0.25
+test_split=0.05
 
 images = np.load(dataset_path + 'train_images.npy')[:10000]
 boxes = np.load(dataset_path + 'train_boxes.npy')[:10000]
@@ -205,6 +205,7 @@ plt.xlabel('Epoch')
 plt.ylabel('Loss')
 plt.title('Epoch Loss')
 plt.legend(['training','validation'])
+plt.grid()
 
 plt.figure()
 plt.plot(epoch_accuracies)
@@ -213,6 +214,7 @@ plt.xlabel('Epoch')
 plt.ylabel('Acc.')
 plt.title('Epoch Acc.')
 plt.legend(['training','validation'])
+plt.grid()
 
 print('results from test dataset:')
 for i in range(20):
