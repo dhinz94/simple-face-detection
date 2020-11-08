@@ -6,6 +6,7 @@ import tensorflow.keras.backend as K
 from utils import utils
 from matplotlib.patches import Rectangle
 
+@tf.function
 def loss_function(pred_boxes, pred_labels,true_boxes,true_labels):
 
 
