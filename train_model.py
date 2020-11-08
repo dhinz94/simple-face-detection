@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
-from tensorflow.keras.layers import Input, Conv2D, Flatten, Dense, BatchNormalization, Add, Activation, Dense
+from tensorflow.keras.layers import Input, Conv2D, Flatten, Dense, BatchNormalization, Add, Activation, Dense,Dropout
 import tensorflow.keras.backend as K
 from utils import utils
 from matplotlib.patches import Rectangle
@@ -101,11 +101,23 @@ print(test_labels.shape)
 input = Input(shape=(resolution, resolution, 3))
 
 x=block(input,start_filter_amount)
+x = Dropout(0.3)(x)
+
 x=block(x,start_filter_amount*2)
+x = Dropout(0.3)(x)
+
 x=block(x,start_filter_amount*4)
+x = Dropout(0.3)(x)
+
 x=block(x,start_filter_amount*8)
+x = Dropout(0.3)(x)
+
 x=block(x,start_filter_amount*16)
+x = Dropout(0.3)(x)
+
 x=block(x,start_filter_amount*32)
+x = Dropout(0.3)(x)
+
 output=block(x,start_filter_amount*64)
 
 x = Flatten()(x)
