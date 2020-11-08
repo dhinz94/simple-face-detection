@@ -57,9 +57,9 @@ dataset_path = '/content/drive/My Drive/simple_face_detection_data/'
 activation = tf.nn.relu
 normalization = BatchNormalization
 use_bias=False
-start_filter_amount = 8
-epochs = 10
-batchsize = 16
+start_filter_amount = 16
+epochs = 100
+batchsize = 32
 test_split=0.25
 
 images = np.load(dataset_path + 'train_images.npy')[:10000]
@@ -189,7 +189,7 @@ for e in range(epochs):
 
 
 
-        if b % int(len(train_images) / batchsize / 5) == 0:
+        if b % int(len(train_images) / batchsize / 1) == 0:
             print('Epoch:', e, 'Batch:', b, 'Loss:', np.array(np.mean(batch_losses)),'Val. Loss:',np.array(np.mean(batch_validation_losses)),'Acc.',np.mean(batch_accuracies),'Val. Acc.',np.mean(batch_validation_accuracies))
 
     epoch_losses.append(np.mean(batch_losses))

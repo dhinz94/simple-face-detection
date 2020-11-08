@@ -27,14 +27,14 @@ while True:
     input_image=cv2.cvtColor(frame,cv2.COLOR_BGR2RGB).reshape(-1,256,256,3)/255
     # input_image=images[0].reshape(1,256,256,3)/255
 
-    pred_box = np.array(model(input_image)[0])
-    coordinate_box=utils.convert_relative_box_to_coordinate_box(pred_box,frame.shape[0],frame.shape[1])
+    pred_box,pred_label = model(input_image)
+    pred_box=np.array(pred_box)
+    confidence=np.array(pred_label)[0,0]
 
-    # input_image=cv2.resize(input_image[0],(frame.shape[1],frame.shape[0]))
-
-
-
-    cv2.rectangle(frame, (coordinate_box[0], coordinate_box[1]), (coordinate_box[0]+coordinate_box[2], coordinate_box[1]+coordinate_box[3]), (0, 255, 0), 3)
+    print(confidence)
+    if confidence>0.5:
+        coordinate_box=utils.convert_relative_box_to_coordinate_box(pred_box[0],frame.shape[0],frame.shape[1])
+        cv2.rectangle(frame, (coordinate_box[0], coordinate_box[1]), (coordinate_box[0]+coordinate_box[2], coordinate_box[1]+coordinate_box[3]), (0, 255, 0), 3)
 
     cv2.imshow('webcam stream', frame)
     if cv2.waitKey(1) == 27:
