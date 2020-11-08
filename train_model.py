@@ -152,7 +152,7 @@ for e in range(epochs):
 
 
         if b % int(len(train_images) / batchsize / 5) == 0:
-            print('Epoch:', e, 'Batch:', b, 'Loss:', np.array(loss),'Val. Loss:',np.array(validation_loss))
+            print('Epoch:', e, 'Batch:', b, 'Loss:', np.array(np.mean(batch_losses)),'Val. Loss:',np.array(np.mean(batch_validation_losses)))
 
     epoch_losses.append(np.mean(batch_losses))
     epoch_validation_losses.append(np.mean(batch_validation_losses))
