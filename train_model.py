@@ -52,7 +52,7 @@ dataset_path = '/content/drive/My Drive/simple_face_detection_data/'
 activation = tf.nn.relu
 normalization = BatchNormalization
 use_bias=False
-start_filter_amount = 8
+start_filter_amount = 64
 epochs = 10
 batchsize = 16
 test_split=0.25
@@ -114,6 +114,7 @@ print(model.summary())
 
 epoch_losses = []
 epoch_validation_losses=[]
+epoch_validation_accuracies=[]
 
 for e in range(epochs):
 
@@ -128,6 +129,7 @@ for e in range(epochs):
 
     batch_losses = []
     batch_validation_losses=[]
+    batch_validation_accuracies=[]
 
     for b in range(int(len(train_images) / batchsize)):
         batch_images = (train_images[b * batchsize:(b + 1) * batchsize] / 255).astype('float32')
@@ -145,17 +147,22 @@ for e in range(epochs):
         pred_test_boxes,pred_test_labels=model(batch_test_images)
         validation_loss=loss_function(pred_test_boxes,pred_test_labels,batch_test_boxes,batch_test_labels)
 
+        batch_validation_accuracy=np.sum(np.array(pred_test_labels))/np.sum(test_labels)
+
         batch_losses.append(np.array(loss))
         batch_validation_losses.append(np.array(validation_loss))
+        batch_validation_accuracies.append(batch_validation_accuracy)
+
 
 
 
 
         if b % int(len(train_images) / batchsize / 5) == 0:
-            print('Epoch:', e, 'Batch:', b, 'Loss:', np.array(np.mean(batch_losses)),'Val. Loss:',np.array(np.mean(batch_validation_losses)))
+            print('Epoch:', e, 'Batch:', b, 'Loss:', np.array(np.mean(batch_losses)),'Val. Loss:',np.array(np.mean(batch_validation_losses)),'Val. Acc.',np.mean(batch_validation_accuracies))
 
     epoch_losses.append(np.mean(batch_losses))
     epoch_validation_losses.append(np.mean(batch_validation_losses))
+    epoch_validation_accuracies.append(np.mean(batch_validation_accuracies))
     model.save(dataset_path+'model.h5')
 
 plt.figure()
@@ -165,6 +172,13 @@ plt.xlabel('Epoch')
 plt.ylabel('Loss')
 plt.title('Epoch Loss')
 plt.legend(['training','validation'])
+
+plt.figure()
+plt.plot(epoch_validation_accuracies)
+plt.xlabel('Epoch')
+plt.ylabel('Acc.')
+plt.title('Epoch Acc.')
+plt.legend(['validation acc.'])
 
 print('results from test dataset:')
 for i in range(20):
@@ -180,8 +194,8 @@ for i in range(20):
 
     plt.figure()
     plt.imshow(input_image[0])
-    if np.array(pred_label)[0,0]>0.5:
-        plt.gca().add_patch(Rectangle((predicted_coordinate_box[0], predicted_coordinate_box[1]), predicted_coordinate_box[2], predicted_coordinate_box[3], linewidth=1, edgecolor='r', facecolor='none'))
+    # if np.array(pred_label)[0,0]>0.5:
+    plt.gca().add_patch(Rectangle((predicted_coordinate_box[0], predicted_coordinate_box[1]), predicted_coordinate_box[2], predicted_coordinate_box[3], linewidth=1, edgecolor='r', facecolor='none'))
     plt.gca().add_patch(Rectangle((label_coordinate_box[0], label_coordinate_box[1]), label_coordinate_box[2], label_coordinate_box[3], linewidth=1, edgecolor='g', facecolor='none'))
     plt.axis('off')
     plt.title('green=True, red=predicted, conf:'+str(np.array(pred_label[0][0]).round(2)))
