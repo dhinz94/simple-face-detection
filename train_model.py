@@ -35,11 +35,11 @@ def compile():
     return train_step
 
 def block(input,filter_amount):
-    x = Conv2D(filter_amount, (3, 3), strides=(2, 2), activation=None)(input)
+    x = Conv2D(filter_amount, (3, 3), strides=(2, 2), activation=None,padding='same')(input)
     x = normalization()(x)
     x = Activation(activation)(x)
 
-    x = Conv2D(filter_amount, (3, 3), strides=(1, 1), activation=None)(x)
+    x = Conv2D(filter_amount, (3, 3), strides=(1, 1), activation=None,padding='same')(x)
     x = normalization()(x)
     output = Activation(activation)(x)
 
@@ -50,12 +50,12 @@ def block(input,filter_amount):
 dataset_path = '/content/drive/My Drive/simple_face_detection_data/'
 
 # local path for development
-# dataset_path='/home/dominic/Dokumente/Github/simple-face-detection/data/'
+dataset_path='/home/dominic/Dokumente/Github/simple-face-detection/data/'
 
 activation = tf.nn.relu
 normalization = BatchNormalization
 use_bias=False
-start_filter_amount = 16
+start_filter_amount = 8
 epochs = 10
 batchsize = 16
 test_split=0.25
