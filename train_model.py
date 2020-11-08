@@ -31,7 +31,7 @@ def compile():
 
         gradients = tape.gradient(loss, model.trainable_variables)
         optimizer.apply_gradients(zip(gradients, model.trainable_variables))
-        train_acc=K.sum(pred_labels)/K.sum(labels)
+        train_acc=K.sum(pred_labels*labels)/K.sum(labels)
         return loss,train_acc
 
     return train_step
@@ -134,7 +134,7 @@ for i in range(10):
     plt.imshow(input_image[0])
     plt.gca().add_patch(Rectangle((label_coordinate_box[0], label_coordinate_box[1]), label_coordinate_box[2], label_coordinate_box[3], linewidth=1, edgecolor='g', facecolor='none'))
     plt.axis('off')
-    plt.title('green=True '+str(test_labels[num][0]))
+    plt.title('Face label: '+str(test_labels[num][0]))
 
 plt.show()
 
@@ -178,7 +178,7 @@ for e in range(epochs):
 
 
 
-        batch_validation_accuracy=np.sum(np.array(pred_test_labels))/np.sum(batch_test_labels)
+        batch_validation_accuracy=np.sum(np.array(pred_test_labels)*batch_test_labels)/np.sum(batch_test_labels)
 
         batch_losses.append(np.array(loss))
         batch_validation_losses.append(np.array(validation_loss))
