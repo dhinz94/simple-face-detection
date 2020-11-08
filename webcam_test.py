@@ -5,7 +5,7 @@ from utils import utils
 import numpy as np
 
 # colab path
-dataset_path='/content/drive/My Drive/celeba_copy/'
+dataset_path='/content/drive/My Drive/simple_face_detection_data/'
 
 # local path for development
 dataset_path='/home/dominic/Dokumente/Github/simple-face-detection/data/'

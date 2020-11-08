@@ -6,36 +6,34 @@ from utils import utils
 from matplotlib.patches import Rectangle
 
 # colab path
-dataset_path='/content/drive/My Drive/celeba_copy/'
+dataset_path='/content/drive/My Drive/simple_face_detection_data/'
 
 # local path for development
-# dataset_path='/home/dominic/Dokumente/Github/simple-face-detection/data/'
+dataset_path='/home/dominic/Dokumente/Github/simple-face-detection/data/'
 
-image_path=dataset_path+'img_celeba/'
+face_image_path= dataset_path + 'img_celeba/'
 box_path=dataset_path+'list_bbox_celeba.txt'
 
 target_resolution=256
 
-print('image_path exists: ',os.path.exists(image_path))
-print('box_path exists: ',os.path.exists(box_path))
 
-
+# read bounding box annotation file and filter dataframe for existing files in path
 boxes=pd.read_csv(box_path,delim_whitespace=True,skiprows=1)
-file_list=os.listdir(image_path)
-file_list=[x for x in file_list if '.jpg' in x]
-
-boxes=boxes[boxes['image_id'].isin(file_list)]
+face_file_list=os.listdir(face_image_path)
+face_file_list=[x for x in face_file_list if '.jpg' in x]
+boxes=boxes[boxes['image_id'].isin(face_file_list)]
 print(boxes)
+
+
 
 image_array=[]
 box_array=[]
-
 for id,row in boxes.iterrows():
 
     if id%500==0:
         print('processed images:',id)
 
-    file_path=image_path+row['image_id']
+    file_path= face_image_path + row['image_id']
     x=row['x_1']
     y=row['y_1']
     w = row['width']
