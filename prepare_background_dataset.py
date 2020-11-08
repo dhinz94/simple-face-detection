@@ -34,11 +34,11 @@ for file in file_paths:
 
     image=plt.imread(file)
     image=cv2.resize(image,(256,256))
-    image=image.reshape(1,256,256,-1)
+    image=image.reshape(256,256,-1)
     if image.shape[3]==1:
         image=cv2.cvtColor(image,cv2.COLOR_GRAY2RGB)
 
-    if not image.shape == (1,256,256,3):
+    if not image.shape == (256,256,3):
         print('shape error: skips image')
         continue
 
