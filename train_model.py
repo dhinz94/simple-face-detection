@@ -11,12 +11,12 @@ def loss_function(pred_boxes, pred_labels,true_boxes,true_labels):
 
 
     box_loss = K.mean(true_labels*K.sum(K.square(pred_boxes - true_boxes),axis=1))
-    # classification_loss=K.mean(K.square(pred_labels-true_labels))
+    classification_loss=K.mean(K.square(pred_labels-true_labels))
     # classification_loss=K.mean(-true_labels*K.log(pred_labels)-(1-true_labels)*K.log(1-pred_labels))
-    # loss=box_loss+classification_loss
+    loss=box_loss+classification_loss
 
     # loss=classification_loss
-    loss=box_loss
+    # loss=box_loss
 
     return loss
 
@@ -141,7 +141,7 @@ epoch_losses = []
 epoch_validation_losses=[]
 epoch_validation_accuracies=[]
 
-optimizer = tf.keras.optimizers.Adam(lr=1e-4)
+optimizer = tf.keras.optimizers.Adam(lr=1e-5)
 
 train_step = compile()
 
